@@ -1,0 +1,85 @@
+#Importamos la clase pokemon
+from pokemon import Pokemon 
+
+#Creamos una clase de jugador con sus funciones
+class Jugador:
+    def __init__(self, nombre):
+        self.nombre = nombre
+        self.pokemons = []
+        self.mochila = {}
+
+    def agregar_pokemon(self, pokemon: Pokemon):
+        self.pokemons.append(pokemon)
+
+    def inicializar_mochila(self, pocion, cantidad):
+        self.mochila[pocion.nombre] = cantidad
+
+    def usar_pocion(self, pokemon):
+        if "Poción de Vida" in self.mochila and self.mochila["Poción de Vida"] > 0:
+            print("¿Deseas usar la Poción de Vida para curar a tu Pokémon?")
+            print("1. Sí   2. No")
+            respuesta = int(input())
+            if respuesta == 1:
+                cantidad_regen = min(20, pokemon.PS_max - pokemon.PS)
+                pokemon.PS += cantidad_regen
+                self.mochila["Poción de Vida"] -= 1
+                print("{} ha usado Poción de Vida y ha regenerado {} puntos de vida.".format(pokemon.nombre, cantidad_regen))
+            else:
+                print("Decidiste no usar la Poción de Vida.")
+
+    def combatir(self, jugador_oponente):
+        if len(self.pokemons) == 0 or len(jugador_oponente.pokemons) == 0:
+            print("No hay suficientes Pokémon para el combate.")
+            return
+
+        pokemon_jugador_1 = self.pokemons[0]
+        pokemon_jugador_2 = jugador_oponente.pokemons[0]
+
+        print("¡Comienza el combate entre {} y {}!".format(pokemon_jugador_1.nombre, pokemon_jugador_2.nombre))
+
+        turno = 1
+        while pokemon_jugador_1.PS > 0 and pokemon_jugador_2.PS > 0:
+            if turno % 2 != 0:
+                atacante = pokemon_jugador_1
+                defensor = pokemon_jugador_2
+                jugador_atacante = self
+                jugador_defensor = jugador_oponente
+            else:
+                atacante = pokemon_jugador_2
+                defensor = pokemon_jugador_1
+                jugador_atacante = jugador_oponente
+                jugador_defensor = self
+
+            print("""
+                Turno de {}
+                1. Atacar   2. Mochila
+                3. Huir
+                """.format(atacante.nombre))
+            respuesta = int(input())
+            if respuesta == 1:
+                print("{} ataca a {}.".format(atacante.nombre, defensor.nombre))
+                daño = atacante.calcular_daño(defensor)
+                defensor.perder_PS(daño)
+            elif respuesta == 2:
+                print("Contenido de la mochila del {}:".format(jugador_atacante.nombre))
+                for item, cantidad in jugador_atacante.mochila.items():
+                    print("- {} (Cantidad: {})".format(item, cantidad))
+                num_pocion = 1
+                pocion_seleccionada = 1
+                if num_pocion in range(1, len(jugador_atacante.mochila) + 1):
+                    pocion_seleccionada = list(jugador_atacante.mochila.keys())[num_pocion - 1]
+                if pocion_seleccionada == "Poción de Vida":
+                    jugador_atacante.usar_pocion(atacante)
+                else:
+                    print("No tienes esa poción en tu mochila.")
+            elif respuesta == 3:
+                break
+            if defensor.PS <= 0:
+                print("{} ha debilitado a {}.".format(atacante.nombre, defensor.nombre))
+                defensor.PS = 0
+            turno += 1
+
+        if pokemon_jugador_1.PS <= 0:
+            print("{} ha ganado el combate.".format(pokemon_jugador_2.nombre))
+        else:
+            print("{} ha ganado el combate.".format(pokemon_jugador_1.nombre))
