@@ -1,0 +1,200 @@
+#Importamos los demas codigos
+
+import json
+from pokemon import Pokemon
+from Pocion_curativa import Pocion_Curativa
+from jugador import Jugador
+from habilidad import Habilidades
+import os
+
+#Establecemos las habilidades de cada pokemon con sus estadisticas
+Llamarada = Habilidades("Llamarada","Fuego" , 60, 100, 10)
+Embestida = Habilidades("Embestida","Normal" , 40, 100, 20)
+Burbuja = Habilidades("Burbuja","Agua" , 40, 100, 15)
+Hidrobomba = Habilidades("Hidrobomba","Agua" , 80, 100, 5)
+Hoja_Afilada = Habilidades("Hoja Afilada","Planta", 55, 95, 10)
+Pisoton = Habilidades("Pisoton","Normal" , 50, 100, 15)
+Impactrueno = Habilidades("Impactrueno","Electrico" , 80, 100, 5)
+Multi_Patadas = Habilidades("Multi-Patadas","Lucha" , 70, 100, 5)
+Niebla = Habilidades("Niebla","Fantasma" , 60, 100, 15)
+Avalancha = Habilidades("Avalancha","Piedra" , 75, 100, 5)
+Rayo = Habilidades("Rayo","Electrico" , 50, 100, 15)
+Psiquico = Habilidades("Psiquico","Psiquico" , 60, 100, 15)
+Enredaderas = Habilidades("Enredaderas","Planta" , 60, 100, 15)
+Ataque_Rapido = Habilidades("Ataque Rapido","Normal" , 65, 100, 15)
+Rompehuesos = Habilidades("Rompehuesos","Lucha" , 80, 100, 5)
+Descarga = Habilidades("Descarga","Electrico" , 80, 100, 10)
+Asustar = Habilidades("Asustar","Fantasma" , 80, 100, 5)
+Telequinesis = Habilidades("Telequinesis","Psiquico" , 80, 100, 10)
+Temblar = Habilidades("Temblar","Piedra" , 65, 100, 15)
+Volcan = Habilidades("Volcan","Fuego" , 80, 100, 5)
+Venasaur = Pokemon("Venasaur","Planta", 82, 83, 80)
+Blastoise = Pokemon("Blastoise", "Agua", 83, 100, 79)
+Charizard = Pokemon("Charizard", "Fuego", 84, 78, 78)
+Pikachu = Pokemon("Pikachu","Electrico", 98, 68, 80)
+Snorlax = Pokemon("Snorlax","Normal", 110, 65, 160)
+Gyarados = Pokemon("Gyarados","Agua",125, 79, 95)
+Gengar = Pokemon("Gengar","Fantasma", 85, 65, 55)
+Hitmonlee = Pokemon("Hitmonlee","Lucha",120, 56, 60)
+Onix = Pokemon("Onix","Piedra", 50, 160, 50)
+Alakazam = Pokemon("Alakazam","Psiquico",90,85,60)
+pocion_vida = Pocion_Curativa("Poción de Vida", 20)
+jugador_1 = Jugador("Jugador 1")
+jugador_2 = Jugador("Jugador 2")
+
+#Definimos la funcion para que cada jugador elija su pokemon
+def elegir_pokemon(opciones_pokemon, jugador):
+    print("{}, elige tu Pokémon:".format(jugador.nombre))
+    for i, pokemon in enumerate(opciones_pokemon, start=1):
+        print("{}. {} (Tipo: {}, Ataque: {}, Defensa: {}, PS: {})".format(i, pokemon.nombre, pokemon.clase, pokemon.ataque, pokemon.defensa, pokemon.PS))
+
+    respuesta = int(input())
+    while respuesta not in range(1, len(opciones_pokemon) + 1):
+        print("Opción no válida. Elige nuevamente.")
+        respuesta = int(input())
+
+    pokemon_elegido = opciones_pokemon[respuesta - 1]
+    jugador.agregar_pokemon(pokemon_elegido)
+    print("Pokémon {} seleccionado con éxito.".format(pokemon_elegido.nombre))
+
+# Lista de opciones de pokémon para elegir
+opciones_pokemon = [
+    Venasaur,
+    Blastoise,
+    Charizard,
+    Pikachu,
+    Snorlax,
+    Gyarados,
+    Gengar,
+    Hitmonlee,
+    Onix,
+    Alakazam  
+]
+#Ingreso (El inicio)
+ingreso = int(input("""
+                    
+                                  ,'\                                   
+    _.----.        ____         ,'  _\   ___    ___     ____
+_,-'       `.     |    |  /`.   \,-'    |   \  /   |   |    \  |`.
+\      __    \    '-.  | /   `.  ___    |    \/    |   '-.   \ |  |
+ \.    \ \   |  __  |  |/    ,','_  `.  |          | __  |    \|  |
+   \    \/   /,' _`.|      ,' / / / /   |          ,' _`.|     |  |
+    \     ,-'/  /   \    ,'   | \/ / ,`.|         /  /   \  |     |
+     \    \ |   \_/  |   `-.  \    `'  /|  |    ||   \_/  | |\    |
+      \    \ \      /       `-.`.___,-' |  |\  /| \      /  | |   |
+       \    \ `.__,'|  |`-._    `|      |__| \/ |  `.__,'|  | |   |
+        \_.-'       |__|    `-._ |              '-.|     '-.| |   |
+                                `'                            '-._|                    
+                            Python Edition
+                                1. Jugar
+"""))
+if ingreso == 1:
+    jugador_1 = Jugador("Jugador 1")
+    jugador_2 = Jugador("Jugador 2")
+
+    # Elegir pokémon para los jugadores
+    elegir_pokemon(opciones_pokemon, jugador_1)
+    elegir_pokemon([opcion for opcion in opciones_pokemon if opcion != jugador_1.pokemons[0]], jugador_2)
+
+#Dependiendo de tu pokemon se va a asignar una habilidad
+jugador_1.inicializar_mochila(pocion_vida, 5)
+jugador_2.inicializar_mochila(pocion_vida, 5)
+Charizard.inicializar_habilidad(Llamarada)
+Charizard.inicializar_habilidad(Volcan)
+Charizard.inicializar_habilidad(Embestida)
+Blastoise.inicializar_habilidad(Hidrobomba)
+Blastoise.inicializar_habilidad(Burbuja)
+Blastoise.inicializar_habilidad(Embestida)
+Venasaur.inicializar_habilidad(Hoja_Afilada)
+Venasaur.inicializar_habilidad(Embestida)
+Venasaur.inicializar_habilidad(Enredaderas)
+Venasaur.inicializar_habilidad(Pisoton)
+Pikachu.inicializar_habilidad(Rayo)
+Pikachu.inicializar_habilidad(Ataque_Rapido)
+Pikachu.inicializar_habilidad(Embestida)
+Pikachu.inicializar_habilidad(Impactrueno)
+Snorlax.inicializar_habilidad(Embestida)
+Snorlax.inicializar_habilidad(Pisoton)
+Snorlax.inicializar_habilidad(Rompehuesos)
+Snorlax.inicializar_habilidad(Temblar)
+Gyarados.inicializar_habilidad(Rompehuesos)
+Gyarados.inicializar_habilidad(Hidrobomba)
+Gyarados.inicializar_habilidad(Burbuja)
+Gengar.inicializar_habilidad(Niebla)
+Gengar.inicializar_habilidad(Psiquico)
+Gengar.inicializar_habilidad(Asustar)
+Hitmonlee.inicializar_habilidad(Embestida)
+Hitmonlee.inicializar_habilidad(Multi_Patadas)
+Hitmonlee.inicializar_habilidad(Avalancha)
+Hitmonlee.inicializar_habilidad(Descarga)
+Onix.inicializar_habilidad(Embestida)
+Onix.inicializar_habilidad(Avalancha)
+Onix.inicializar_habilidad(Rompehuesos)
+Onix.inicializar_habilidad(Volcan)
+Alakazam.inicializar_habilidad(Telequinesis)
+Alakazam.inicializar_habilidad(Psiquico)
+Alakazam.inicializar_habilidad(Embestida)
+
+#Jugador 1 y jugador 2 combaten
+jugador_1.combatir(jugador_2)
+
+#Resultados del combate
+print("\nResultado del combate:")
+print("Jugador 1:")
+for pokemon in jugador_1.pokemons:
+    print("- {} (PS: {})".format(pokemon.nombre, pokemon.PS))
+print("Jugador 2:")
+for pokemon in jugador_2.pokemons:
+    print("- {} (PS: {})".format(pokemon.nombre, pokemon.PS))
+
+if jugador_1.pokemons[0].PS > 0 and jugador_2.pokemons[0].PS > 0:
+    print("\n¡Ha sido un empate!")
+    ganador = "Empate"
+    perdedor = "Empate"
+elif jugador_1.pokemons[0].PS > 0:
+    print("\n¡Jugador 1 ha ganado el combate!")
+    ganador = jugador_1.nombre
+    perdedor = jugador_2.nombre
+else:
+    print("\n¡Jugador 2 ha ganado el combate!")
+    ganador = jugador_2.nombre
+    perdedor = jugador_1.nombre
+
+jugador_1_pokemons_serializable = [pokemon.__dict__ for pokemon in jugador_1.pokemons]
+jugador_2_pokemons_serializable = [pokemon.__dict__ for pokemon in jugador_2.pokemons]
+
+# Convertir las habilidades a diccionarios
+habilidades_jugador_1 = [habilidad.__dict__ for habilidad in jugador_1.pokemons[0].habilidades]
+habilidades_jugador_2 = [habilidad.__dict__ for habilidad in jugador_2.pokemons[0].habilidades]
+
+# Crear el diccionario estadisticas
+estadisticas = {
+    "Ganador": ganador,
+    "Perdedor": perdedor,
+    "Jugador 1": [
+        {
+            'nombre': pokemon.nombre,
+            'clase': pokemon.clase,
+            'ataque': pokemon.ataque,
+            'defensa': pokemon.defensa,
+            'PS': pokemon.PS,
+            'habilidades': habilidades_jugador_1
+        }
+    ],
+    "Jugador 2": [
+        {
+            'nombre': pokemon.nombre,
+            'clase': pokemon.clase,
+            'ataque': pokemon.ataque,
+            'defensa': pokemon.defensa,
+            'PS': pokemon.PS,
+            'habilidades': habilidades_jugador_2
+        }
+    ]
+}
+
+# Guardar el diccionario como JSON
+with open("estadisticas.json", "w") as archivo:
+    json.dump(estadisticas, archivo, indent=2)
+
+print("Gracias por jugar. ¡Hasta luego!")
