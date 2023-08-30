@@ -1,0 +1,19 @@
+#Establecemos la clase habilidades con sus parametros
+class Habilidades:
+    def __init__(self, nombre, tipo, potencia, precision, PP):
+        self.nombre = nombre
+        self.tipo = tipo 
+        self.potencia = potencia 
+        self.precision = precision
+        self.PP = PP
+
+# Método para representar una instancia de Habilidades como un diccionario
+    def __dict__(self):
+        # Crear y devolver un diccionario con los atributos de la instancia
+        return {
+            'nombre': self.nombre,
+            'tipo': self.tipo,
+            'potencia': self.potencia,
+            'precision': self.precision,
+            'PP': self.PP
+        }
