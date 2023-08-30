@@ -1,19 +1,19 @@
-#Establecemos la clase habilidades con sus parametros
-class Habilidades:
-    def __init__(self, nombre, tipo, potencia, precision, PP):
-        self.nombre = nombre
-        self.tipo = tipo 
-        self.potencia = potencia 
-        self.precision = precision
-        self.PP = PP
+#Creamos la clase pokemon con sus parametros y sus funciones como perder vida y calcular el daño que hace
 
-# Método para representar una instancia de Habilidades como un diccionario
-    def __dict__(self):
-        # Crear y devolver un diccionario con los atributos de la instancia
-        return {
-            'nombre': self.nombre,
-            'tipo': self.tipo,
-            'potencia': self.potencia,
-            'precision': self.precision,
-            'PP': self.PP
-        }
+class Pokemon:
+    def __init__(self, nombre, ataque, defensa, PS):
+        self.nombre = nombre
+        self.ataque = ataque
+        self.defensa = defensa
+        self.PS = PS
+        self.PS_max = PS
+
+    def perder_PS(self, cantidad):
+        self.PS = max(0, self.PS - cantidad)
+        print("Se han perdido {} puntos de vida. PS restantes: {}".format(cantidad, self.PS))
+        if self.PS == 0:
+            print("¡El Pokémon ha muerto!")
+
+    def calcular_daño(self, oponente):
+        daño_bruto = (((2/ 5 + 2) * self.ataque / oponente.defensa) / 50 + 2)
+        return int(daño_bruto)
