@@ -1,5 +1,4 @@
-#Importamos los demas codigos
-
+#Importamos los otros archivos
 import json
 from pokemon import Pokemon
 from Pocion_curativa import Pocion_Curativa
@@ -7,7 +6,7 @@ from jugador import Jugador
 from habilidad import Habilidades
 import os
 
-#Establecemos las habilidades de cada pokemon con sus estadisticas
+#Se establecen los valores de los pokemons,habilidades y pociones
 Llamarada = Habilidades("Llamarada","Fuego" , 60, 100, 10)
 Embestida = Habilidades("Embestida","Normal" , 40, 100, 20)
 Burbuja = Habilidades("Burbuja","Agua" , 40, 100, 15)
@@ -42,7 +41,6 @@ pocion_vida = Pocion_Curativa("Poción de Vida", 20)
 jugador_1 = Jugador("Jugador 1")
 jugador_2 = Jugador("Jugador 2")
 
-#Definimos la funcion para que cada jugador elija su pokemon
 def elegir_pokemon(opciones_pokemon, jugador):
     print("{}, elige tu Pokémon:".format(jugador.nombre))
     for i, pokemon in enumerate(opciones_pokemon, start=1):
@@ -70,7 +68,7 @@ opciones_pokemon = [
     Onix,
     Alakazam  
 ]
-#Ingreso (El inicio)
+
 ingreso = int(input("""
                     
                                   ,'\                                   
@@ -96,7 +94,6 @@ if ingreso == 1:
     elegir_pokemon(opciones_pokemon, jugador_1)
     elegir_pokemon([opcion for opcion in opciones_pokemon if opcion != jugador_1.pokemons[0]], jugador_2)
 
-#Dependiendo de tu pokemon se va a asignar una habilidad
 jugador_1.inicializar_mochila(pocion_vida, 5)
 jugador_2.inicializar_mochila(pocion_vida, 5)
 Charizard.inicializar_habilidad(Llamarada)
@@ -135,10 +132,8 @@ Alakazam.inicializar_habilidad(Telequinesis)
 Alakazam.inicializar_habilidad(Psiquico)
 Alakazam.inicializar_habilidad(Embestida)
 
-#Jugador 1 y jugador 2 combaten
 jugador_1.combatir(jugador_2)
 
-#Resultados del combate
 print("\nResultado del combate:")
 print("Jugador 1:")
 for pokemon in jugador_1.pokemons:
@@ -178,7 +173,16 @@ estadisticas = {
             'ataque': pokemon.ataque,
             'defensa': pokemon.defensa,
             'PS': pokemon.PS,
-            'habilidades': habilidades_jugador_1
+            'habilidades': [
+                {
+                    'nombre': habilidad.nombre,
+                    'tipo': habilidad.tipo,
+                    'potencia': habilidad.potencia,
+                    'precision': habilidad.precision,
+                    'PP': habilidad.PP
+                }
+                for habilidad in jugador_1.pokemons[0].habilidades
+            ]
         }
     ],
     "Jugador 2": [
@@ -188,7 +192,16 @@ estadisticas = {
             'ataque': pokemon.ataque,
             'defensa': pokemon.defensa,
             'PS': pokemon.PS,
-            'habilidades': habilidades_jugador_2
+            'habilidades': [
+                {
+                    'nombre': habilidad.nombre,
+                    'tipo': habilidad.tipo,
+                    'potencia': habilidad.potencia,
+                    'precision': habilidad.precision,
+                    'PP': habilidad.PP
+                }
+                for habilidad in jugador_2.pokemons[0].habilidades
+            ]
         }
     ]
 }
