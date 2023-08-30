@@ -1,19 +1,75 @@
-#Creamos la clase pokemon con sus parametros y sus funciones como perder vida y calcular el daño que hace
+#Importamos el archivo Habilidad
+from habilidad import Habilidades
 
+#Creamos la clase pokemon con sus parametros y sus funciones como perder vida y calcular el daño que hace
 class Pokemon:
-    def __init__(self, nombre, ataque, defensa, PS):
+    def __init__(self, nombre, clase, ataque, defensa, PS):
         self.nombre = nombre
+        self.clase = clase
         self.ataque = ataque
         self.defensa = defensa
         self.PS = PS
         self.PS_max = PS
+        self.habilidades = []
 
-    def perder_PS(self, cantidad):
-        self.PS = max(0, self.PS - cantidad)
-        print("Se han perdido {} puntos de vida. PS restantes: {}".format(cantidad, self.PS))
+    def perder_PS(self, daño_bruto):
+        self.PS = max(0, self.PS - daño_bruto)
+        print("Se han perdido {} puntos de vida. PS restantes: {}".format(daño_bruto, self.PS))
         if self.PS == 0:
             print("¡El Pokémon ha muerto!")
 
-    def calcular_daño(self, oponente):
-        daño_bruto = (((2/ 5 + 2) * self.ataque / oponente.defensa) / 50 + 2)
+    def calcular_daño(self, oponente, habilidad_seleccionada):
+        daño_bruto = (((2 / 5 + 2) * habilidad_seleccionada.potencia * self.ataque / oponente.defensa) / 10 + 2)
+        if habilidad_seleccionada.tipo == "Agua" and oponente.clase == "Fuego":
+            print("¡Es muy Efectivo!")
+            daño_bruto *= 2
+        elif habilidad_seleccionada.tipo == "Fuego" and oponente.clase == "Agua":
+            print("Es poco efectivo...")
+            daño_bruto /= 2
+        elif habilidad_seleccionada.tipo == "Fuego" and oponente.clase == "Planta":
+            print("¡Es muy Efectivo!")
+            daño_bruto *= 2
+        elif habilidad_seleccionada.tipo == "Planta" and oponente.clase == "Fuego":
+            print("Es poco efectivo...")
+            daño_bruto /= 2
+        elif habilidad_seleccionada.tipo == "Planta" and oponente.clase == "Agua":
+            print("¡Es muy Efectivo!")
+            daño_bruto *= 2
+        elif habilidad_seleccionada.tipo == "Agua" and oponente.clase == "Planta":
+            print("Es poco efectivo...")
+            daño_bruto /= 2
+        elif habilidad_seleccionada.tipo == "Agua" and oponente.clase == "Piedra":
+            print("¡Es muy Efectivo!")
+            daño_bruto *= 2
+        elif habilidad_seleccionada.tipo == "Lucha" and oponente.clase == "Piedra":
+            print("¡Es muy Efectivo!")
+            daño_bruto *= 2
+        elif habilidad_seleccionada.tipo == "Electrico" and oponente.clase == "Agua":
+            print("¡Es muy Efectivo!")
+            daño_bruto *= 2
+        elif habilidad_seleccionada.tipo == "Psiquico" and oponente.clase == "Fantasma":
+            print("¡Es muy Efectivo!")
+            daño_bruto *= 2
+        elif habilidad_seleccionada.tipo == "Lucha" and oponente.clase == "Fantasma":
+            print("¡No tiene efecto!")
+            daño_bruto = 0
+        elif habilidad_seleccionada.tipo == "Fuego" and oponente.clase == "Piedra":
+            print("Es poco efectivo...")
+            daño_bruto /= 2        
         return int(daño_bruto)
+        
+
+    def inicializar_habilidad(self, habilidad: Habilidades):
+        self.habilidades.append(habilidad)
+
+    def elegir_habilidad(self):
+        print("Elige un ataque para {}:".format(self.nombre))
+        for i, habilidad in enumerate(self.habilidades):
+            print("{}. {} (Potencia: {}, Precisión: {}, PP: {})".format(i + 1, habilidad.nombre, habilidad.potencia, habilidad.precision, habilidad.PP))
+
+        respuesta = int(input())
+        while respuesta not in range(1, len(self.habilidades) + 1):
+            print("Opción no válida. Elige nuevamente.")
+            respuesta = int(input())
+
+        return self.habilidades[respuesta - 1]
