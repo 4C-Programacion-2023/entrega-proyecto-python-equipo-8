@@ -1,7 +1,7 @@
-#Importamos la clase pokemon
-from pokemon import Pokemon 
+#Importamos clase pokemon
+from pokemon import Pokemon
 
-#Creamos una clase de jugador con sus funciones
+#Creamos la clase Jugador con sus funciones
 class Jugador:
     def __init__(self, nombre):
         self.nombre = nombre
@@ -27,6 +27,7 @@ class Jugador:
             else:
                 print("Decidiste no usar la Poción de Vida.")
 
+
     def combatir(self, jugador_oponente):
         if len(self.pokemons) == 0 or len(jugador_oponente.pokemons) == 0:
             print("No hay suficientes Pokémon para el combate.")
@@ -39,39 +40,86 @@ class Jugador:
 
         turno = 1
         while pokemon_jugador_1.PS > 0 and pokemon_jugador_2.PS > 0:
-            if turno % 2 != 0:
-                atacante = pokemon_jugador_1
-                defensor = pokemon_jugador_2
-                jugador_atacante = self
-                jugador_defensor = jugador_oponente
-            else:
-                atacante = pokemon_jugador_2
-                defensor = pokemon_jugador_1
+            if turno % 2 == 0:
+                atacante = jugador_oponente.pokemons[0]
+                defensor = self.pokemons[0]
                 jugador_atacante = jugador_oponente
                 jugador_defensor = self
+                
+            else:
+                atacante = self.pokemons[0]
+                defensor = jugador_oponente.pokemons[0]
+                jugador_atacante = self
+                jugador_defensor = jugador_oponente
 
             print("""
-                Turno de {}
-                1. Atacar   2. Mochila
-                3. Huir
+                Turno de {} 
+               ___________________________    
+              |                           |
+              |  1. Atacar   2. Mochila   |
+              |  3. Pasar    4. -------   |
+              |___________________________|   
                 """.format(atacante.nombre))
             respuesta = int(input())
             if respuesta == 1:
-                print("{} ataca a {}.".format(atacante.nombre, defensor.nombre))
-                daño = atacante.calcular_daño(defensor)
-                defensor.perder_PS(daño)
+                ataque_seleccionado = atacante.elegir_habilidad()
+                print("{} seleccionó {}.".format(atacante.nombre, ataque_seleccionado.nombre))
+                if ataque_seleccionado.PP == 0:
+                    print("¡No tienes mas ataques de este tipo!")
+                else:
+                    ataque_seleccionado.PP = ataque_seleccionado.PP - 1
+                    print("{} ataca a {}.".format(atacante.nombre, defensor.nombre))
+                    if ataque_seleccionado.tipo == "Normal":
+                        print("""
+🔘🔘🔘🔘🔘🔘🔘🔘🔘🔘🔘🔘🔘🔘🔘🔘🔘🔘🔘🔘🔘🔘🔘🔘🔘🔘🔘🔘🔘🔘🔘🔘🔘🔘🔘🔘🔘🔘
+                              """)
+                    if ataque_seleccionado.tipo == "Fuego":
+                        print("""
+🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
+                              """)
+                    if ataque_seleccionado.tipo == "Planta":
+                        print("""
+🌿🌿🌿🌿🌿🌿🌿🌿🌿🌿🌿🌿🌿🌿🌿🌿🌿🌿🌿🌿🌿🌿🌿🌿🌿🌿🌿🌿🌿🌿🌿🌿🌿🌿🌿🌿🌿🌿🌿🌿
+                              """)
+                    if ataque_seleccionado.tipo == "Agua":
+                        print("""
+🌊🌊🌊🌊🌊🌊🌊🌊🌊🌊🌊🌊🌊🌊🌊🌊🌊🌊🌊🌊🌊🌊🌊🌊🌊🌊🌊🌊🌊🌊🌊🌊🌊🌊🌊🌊🌊🌊🌊
+                              """)
+                    if ataque_seleccionado.tipo == "Psiquico":
+                        print("""
+🧠🧠🧠🧠🧠🧠🧠🧠🧠🧠🧠🧠🧠🧠🧠🧠🧠🧠🧠🧠🧠🧠🧠🧠🧠🧠🧠🧠🧠🧠🧠🧠🧠🧠🧠🧠🧠🧠
+                              """)    
+                    if ataque_seleccionado.tipo == "Lucha":
+                        print("""
+👊💥👊💥👊💥👊💥👊💥👊💥👊💥👊💥👊💥👊💥👊💥👊💥👊💥👊💥👊💥👊💥👊💥👊💥👊💥👊💥
+                              """)
+                    if ataque_seleccionado.tipo == "Fantasma":
+                        print("""
+👻👻👻👻👻👻👻👻👻👻👻👻👻👻👻👻👻👻👻👻👻👻👻👻👻👻👻👻👻👻👻👻👻👻👻👻👻👻
+                              """)    
+                    if ataque_seleccionado.tipo == "Piedra":
+                        print("""
+🗻🗻🗻🗻🗻🗻🗻🗻🗻🗻🗻🗻🗻🗻🗻🗻🗻🗻🗻🗻🗻🗻🗻🗻🗻🗻🗻🗻🗻🗻🗻🗻🗻🗻🗻🗻
+                              """)
+                    if ataque_seleccionado.tipo == "Electrico":
+                        print("""
+⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡
+                              """)                                                                                                
+                    daño = atacante.calcular_daño(defensor, ataque_seleccionado)
+                    defensor.perder_PS(daño)
             elif respuesta == 2:
                 print("Contenido de la mochila del {}:".format(jugador_atacante.nombre))
                 for item, cantidad in jugador_atacante.mochila.items():
                     print("- {} (Cantidad: {})".format(item, cantidad))
-                num_pocion = 1
-                pocion_seleccionada = 1
+                print("Elige el número de la poción que deseas usar:")
+                num_pocion = int(input())
+                pocion_seleccionada = None
                 if num_pocion in range(1, len(jugador_atacante.mochila) + 1):
                     pocion_seleccionada = list(jugador_atacante.mochila.keys())[num_pocion - 1]
                 if pocion_seleccionada == "Poción de Vida":
                     jugador_atacante.usar_pocion(atacante)
                 else:
-                    print("No tienes esa poción en tu mochila.")
+                    print("Poción inválida o no encontrada en la mochila.")
             elif respuesta == 3:
                 break
             if defensor.PS <= 0:
