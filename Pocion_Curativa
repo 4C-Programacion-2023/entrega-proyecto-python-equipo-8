@@ -1,0 +1,9 @@
+#Creamos la clase de la pocion
+
+class Pocion_Curativa:
+    def __init__(self, nombre, cantidad_regen):
+        self.nombre = nombre
+        self.cantidad_regen = cantidad_regen
+    def usar(self, pokemon):
+        pokemon.PS = min(pokemon.PS_max, pokemon.PS + self.cantidad_regen)
+        print("{} ha usado {} y ha regenerado {} puntos de vida.".format(pokemon.nombre, self.nombre, self.cantidad_regen))
